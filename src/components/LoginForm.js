@@ -1,32 +1,38 @@
 import React, {useState} from 'react'
+import { useDispatch } from 'react-redux';
+import { fetchDataUsers } from '../config/Login/LoginSlice';
 
-function LoginForm({Login, error}) {
-    const [details, setDetails] = useState({name: "", email: "", password: ""});
+function LoginForm({error}) {
 
-    const submitHandler = e => {
-        e.preventDefault();
-        
-        Login(details);
+
+    const dispatch = useDispatch()
+
+    const [user, setUser] = useState({
+      name:"",
+      email:"",
+      password:""
+    })
+
+    const handleLogin = (e) => {
+      e.preventDefault();
+      dispatch(fetchDataUsers(user))
     }
+    
   return (
-   <form onSubmit={submitHandler}>
+   <form onSubmit={handleLogin}>
         <div className='form-inner'>
             <h2>Form Login</h2>
             {(error !== "") ? (<div className="error">{error}</div>) : ""}
             <div className="form-group">
-              <label htmlFor="name">Name :</label>
-              <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email :</label>
-              <input type="email" name="email" id="email" onChange={e => setDetails({...details, email: e.target.value})} value={details.email}  />
+              <label htmlFor="email">Email / Username :</label>
+              <input type="text" name="email" id="email" onChange={e => setUser({...user, email: e.target.value})} value={user.email}  />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password :</label>
-              <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password}  />
+              <input type="password" name="password" id="password" onChange={e => setUser({...user, password: e.target.value})} value={user.password}  />
             </div>
 
-            <input type="submit" value="LOGIN" />
+            <input type="submit" value="LOGIN"/>
         </div>
    </form>
   )
